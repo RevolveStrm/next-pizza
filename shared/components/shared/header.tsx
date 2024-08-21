@@ -16,10 +16,11 @@ import { SearchInput } from './search-input';
 
 interface Props {
     hasSearch?: boolean;
+    hasCart?: boolean;
     className?: string;
 }
 
-export const Header: React.FC<Props> = ({ className, hasSearch = true }) => {
+export const Header: React.FC<Props> = ({ className, hasSearch = true, hasCart = true }) => {
     const [openAuthModal, setOpenAuthModal] = React.useState(false);
 
     const searchParams = useSearchParams();
@@ -77,8 +78,8 @@ export const Header: React.FC<Props> = ({ className, hasSearch = true }) => {
                     <ProfileButton
                         onClickSignIn={() => setOpenAuthModal(true)}
                     />
-
-                    <CartButton />
+                    
+                    {hasCart && <CartButton />}
                 </div>
             </Container>
         </header>

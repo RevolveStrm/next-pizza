@@ -5,7 +5,6 @@ import { findPizzas, GetSearchParams } from 'shared/lib/find-pizzas';
 import {
     Container,
     Filters,
-    ProductCard,
     ProductsGroupList,
     Title,
     TopBar,
