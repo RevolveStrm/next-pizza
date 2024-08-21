@@ -1,6 +1,8 @@
 import React from 'react';
-import { Title } from './title';
+
 import { cn } from 'shared/lib/utils';
+
+import { Title } from './title';
 
 interface Props {
     title?: string;

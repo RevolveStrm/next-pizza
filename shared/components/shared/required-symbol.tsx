@@ -5,5 +5,5 @@ interface Props {
 }
 
 export const RequiredSymbol: React.FC<Props> = ({ className }) => {
-    return <span className='font-small text-red-500'>*</span>;
-}
+    return <span className="font-small text-red-500">*</span>;
+};

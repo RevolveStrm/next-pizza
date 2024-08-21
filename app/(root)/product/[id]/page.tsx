@@ -1,8 +1,13 @@
-import { Container, ProductForm } from 'shared/components/shared';
-import { prisma } from 'prisma/db';
 import { notFound } from 'next/navigation';
 
-export default async function ProductPage({ params: { id } }: { params: { id: string } }) {
+import { prisma } from 'prisma/db';
+import { Container, ProductForm } from 'shared/components/shared';
+
+export default async function ProductPage({
+    params: { id },
+}: {
+    params: { id: string };
+}) {
     if (isNaN(Number(id))) {
         return notFound();
     }

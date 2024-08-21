@@ -6,9 +6,7 @@ interface Props {
 
 export const UserVerificationTemplate: React.FC<Props> = ({ code }) => (
     <div className="bg-gray-100 p-6 rounded-lg shadow-lg max-w-md mx-auto text-center">
-        <p className="text-lg mb-4">
-            Ваш код підтвердження:
-        </p>
+        <p className="text-lg mb-4">Ваш код підтвердження:</p>
         <h2 className="text-2xl font-bold text-green-600 mb-6">{code}</h2>
 
         <p>

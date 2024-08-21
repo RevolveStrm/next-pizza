@@ -30,12 +30,12 @@ export const findPizzas = async (params: GetSearchParams) => {
                 where: {
                     ingredients: ingredientsIdArr
                         ? {
-                            some: {
-                                id: {
-                                    in: ingredientsIdArr,
-                                },
-                            },
-                        }
+                              some: {
+                                  id: {
+                                      in: ingredientsIdArr,
+                                  },
+                              },
+                          }
                         : undefined,
                     items: {
                         some: {

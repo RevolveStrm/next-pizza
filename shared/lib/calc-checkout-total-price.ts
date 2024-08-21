@@ -1,12 +1,12 @@
-import { DELIVERY_VALUE } from "shared/constants/delivery-rate";
-import { VAT_RATE } from "shared/constants/vat"
+import { DELIVERY_VALUE } from 'shared/constants/delivery-rate';
+import { VAT_RATE } from 'shared/constants/vat';
 
 export type CheckoutTotalPriceDetails = {
     vatPrice: number;
     itemsPrice: number;
     deliveryPrice: number;
     totalPrice: number;
-}
+};
 
 export const calcCheckoutTotalPriceDetails = (itemsPrice: number) => {
     const deliveryPrice = DELIVERY_VALUE;
@@ -17,15 +17,13 @@ export const calcCheckoutTotalPriceDetails = (itemsPrice: number) => {
         vatPrice,
         itemsPrice,
         deliveryPrice,
-        totalPrice
-    }
-}
+        totalPrice,
+    };
+};
 
 const formatToFloat = (price: number): number => {
     if (!price) {
         return 0;
     }
-    return !Number.isInteger(price) ?
-        Number(price.toFixed(2)) :
-        price;
-}
+    return !Number.isInteger(price) ? Number(price.toFixed(2)) : price;
+};

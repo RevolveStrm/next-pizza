@@ -1,13 +1,15 @@
 'use client';
 
-import React from 'react';
-import { Title } from './title';
-import { ProductCard } from './product-card';
-import { useIntersection } from 'react-use';
-import { useCategoryStore } from '../../store';
 import { Product, ProductItem } from '@prisma/client';
+import React from 'react';
+import { useIntersection } from 'react-use';
+
 import { cn } from 'shared/lib/utils';
 import { ProductWithRelations } from 'types/product';
+
+import { ProductCard } from './product-card';
+import { Title } from './title';
+import { useCategoryStore } from '../../store';
 
 interface Props {
     title: string;
@@ -24,10 +26,10 @@ export const ProductsGroupList: React.FC<Props> = ({
     listClassName,
     className,
 }) => {
-    const setActiveCategoryId = useCategoryStore((state) => state.setActiveId)
+    const setActiveCategoryId = useCategoryStore((state) => state.setActiveId);
     const intersectionRef = React.useRef(null);
     const intersection = useIntersection(intersectionRef, {
-        threshold: 0.4
+        threshold: 0.4,
     });
 
     React.useEffect(() => {
@@ -41,19 +43,21 @@ export const ProductsGroupList: React.FC<Props> = ({
             <Title text={title} size="lg" className="font-extrabold mb-5" />
 
             <div className={cn('grid grid-cols-3 gap-[50px]', listClassName)}>
-                {
-                    products.map((product: ProductWithRelations) => (
-                        <ProductCard
-                            key={product.id}
-                            id={product.id}
-                            name={product.name}
-                            price={Math.min(...product?.items.map((item: ProductItem) => item.price))}
-                            imageUrl={product.imageUrl}
-                            ingredients={product.ingredients}
-                        />
-                    ))
-                }
+                {products.map((product: ProductWithRelations) => (
+                    <ProductCard
+                        key={product.id}
+                        id={product.id}
+                        name={product.name}
+                        price={Math.min(
+                            ...product?.items.map(
+                                (item: ProductItem) => item.price,
+                            ),
+                        )}
+                        imageUrl={product.imageUrl}
+                        ingredients={product.ingredients}
+                    />
+                ))}
             </div>
         </div>
     );
-}
+};

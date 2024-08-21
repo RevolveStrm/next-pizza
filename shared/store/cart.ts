@@ -1,6 +1,7 @@
+import { create } from 'zustand';
+
 import { CartStateItem, getCartDetails } from 'shared/lib/get-cart-details';
 import { API } from 'shared/services/api-client';
-import { create } from 'zustand';
 
 export interface CartState {
     loading: boolean;
@@ -12,7 +13,6 @@ export interface CartState {
     addCartItem: (values: any) => Promise<void>;
     removeCartItem: (id: number) => Promise<void>;
 }
-
 
 export const useCartStore = create<CartState>((set, get) => ({
     items: [],
@@ -51,7 +51,9 @@ export const useCartStore = create<CartState>((set, get) => ({
             set((state) => ({
                 loading: true,
                 error: false,
-                items: state.items.map((item) => (item.id === id ? { ...item, disabled: true } : item)),
+                items: state.items.map((item) =>
+                    item.id === id ? { ...item, disabled: true } : item,
+                ),
             }));
             const data = await API.cart.removeCartItem(id);
             set(getCartDetails(data));
@@ -61,7 +63,10 @@ export const useCartStore = create<CartState>((set, get) => ({
         } finally {
             set((state) => ({
                 loading: false,
-                items: state.items.map((item) => ({ ...item, disabled: false })),
+                items: state.items.map((item) => ({
+                    ...item,
+                    disabled: false,
+                })),
             }));
         }
     },

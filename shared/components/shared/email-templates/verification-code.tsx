@@ -4,7 +4,9 @@ interface Props {
     verificationUrl: string;
 }
 
-export const VerificationCodeTemplate: React.FC<Props> = ({ verificationUrl }) => (
+export const VerificationCodeTemplate: React.FC<Props> = ({
+    verificationUrl,
+}) => (
     <div
         style={{
             backgroundColor: '#f7fafc', // bg-gray-100

@@ -1,5 +1,6 @@
-import { CartItemDTO } from 'shared/services/dto/cart.dto';
 import React from 'react';
+
+import { CartItemDTO } from 'shared/services/dto/cart.dto';
 
 interface Props {
     orderId: number;
@@ -59,9 +60,13 @@ export const OrderSuccessTemplate: React.FC<Props> = ({ orderId, items }) => (
                         marginBottom: '0.5rem', // space-y-2
                     }}
                 >
-                    <span style={{ fontWeight: '600' }}>{item.productItem.product.name}</span> |{' '}
-                    {item.productItem.price} ₴ x {item.quantity} шт. ={' '}
-                    <span style={{ color: '#16a34a' }}>{item.productItem.price * item.quantity} ₴</span>
+                    <span style={{ fontWeight: '600' }}>
+                        {item.productItem.product.name}
+                    </span>{' '}
+                    | {item.productItem.price} ₴ x {item.quantity} шт. ={' '}
+                    <span style={{ color: '#16a34a' }}>
+                        {item.productItem.price * item.quantity} ₴
+                    </span>
                 </li>
             ))}
         </ul>

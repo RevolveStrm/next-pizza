@@ -1,6 +1,7 @@
-import React from "react";
-import { API } from "../services/api-client";
-import { Ingredient } from "@prisma/client";
+import { Ingredient } from '@prisma/client';
+import React from 'react';
+
+import { API } from '../services/api-client';
 
 interface ReturnProps {
     ingredients: Ingredient[];
@@ -16,7 +17,8 @@ export const useIngredients = (): ReturnProps => {
             try {
                 setLoading(true);
 
-                const ingredients: Ingredient[] = await API.ingredients.getAll();
+                const ingredients: Ingredient[] =
+                    await API.ingredients.getAll();
 
                 setIngredients(ingredients);
             } catch (e) {
@@ -30,4 +32,4 @@ export const useIngredients = (): ReturnProps => {
     }, []);
 
     return { ingredients, loading };
-}
+};

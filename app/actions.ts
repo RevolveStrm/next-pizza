@@ -1,23 +1,26 @@
 'use server';
 
-import { OrderStatus, User, UserRole } from "@prisma/client";
-import { hashSync } from "bcrypt";
-import { cookies } from "next/headers";
-import { prisma } from "prisma/db";
-import { OrderPaymentTemplate } from "shared/components/shared";
-import { VerificationCodeTemplate } from "shared/components/shared/email-templates/verification-code";
-import { authOptions } from "shared/constants/auth-options";
-import { CheckoutFormFields } from "shared/constants/checkout-form-schema";
-import { createCheckoutSession } from "shared/lib/create-payment-session";
-import { generateVerificationCode } from "shared/lib/generate-verification-code";
-import { getSessionUser } from "shared/lib/get-session-user";
-import { sendEmail } from "shared/lib/send-email";
+import { OrderStatus, User, UserRole } from '@prisma/client';
+import { hashSync } from 'bcrypt';
+import { cookies } from 'next/headers';
 
-export type RegisterUserDTO = Pick<User, "email" | "fullName" | "password">
+import { prisma } from 'prisma/db';
+import { OrderPaymentTemplate } from 'shared/components/shared';
+import { VerificationCodeTemplate } from 'shared/components/shared/email-templates/verification-code';
+import { authOptions } from 'shared/constants/auth-options';
+import { CheckoutFormFields } from 'shared/constants/checkout-form-schema';
+import { createCheckoutSession } from 'shared/lib/create-payment-session';
+import { generateVerificationCode } from 'shared/lib/generate-verification-code';
+import { getSessionUser } from 'shared/lib/get-session-user';
+import { sendEmail } from 'shared/lib/send-email';
 
-export type UpdateUserDTO = Pick<User, "email" | "fullName" | "password">
+export type RegisterUserDTO = Pick<User, 'email' | 'fullName' | 'password'>;
 
-export async function createOrder(data: CheckoutFormFields): Promise<string | undefined> {
+export type UpdateUserDTO = Pick<User, 'email' | 'fullName' | 'password'>;
+
+export async function createOrder(
+    data: CheckoutFormFields,
+): Promise<string | undefined> {
     try {
         const cookieStore = cookies();
         const cartToken = cookieStore.get('cart-token')?.value;
@@ -37,12 +40,12 @@ export async function createOrder(data: CheckoutFormFields): Promise<string | un
                         ingredients: true,
                         productItem: {
                             include: {
-                                product: true
-                            }
-                        }
-                    }
-                }
-            }
+                                product: true,
+                            },
+                        },
+                    },
+                },
+            },
         });
 
         if (!userCart) {
@@ -63,21 +66,21 @@ export async function createOrder(data: CheckoutFormFields): Promise<string | un
                 comment: data.comment,
                 totalAmount: userCart.totalAmount,
                 status: OrderStatus.PENDING,
-                items: JSON.stringify(userCart.items)
+                items: JSON.stringify(userCart.items),
             },
         });
 
         if (!order) {
-            throw new Error('Couldn\'t create an order');
+            throw new Error("Couldn't create an order");
         }
 
         await prisma.cart.update({
             where: {
-                id: userCart.id
+                id: userCart.id,
             },
             data: {
-                totalAmount: 0
-            }
+                totalAmount: 0,
+            },
         });
 
         await prisma.cartItem.deleteMany({
@@ -95,35 +98,39 @@ export async function createOrder(data: CheckoutFormFields): Promise<string | un
         });
 
         if (!checkoutSession) {
-            throw new Error('Couldn\'t get a checkout session data');
+            throw new Error("Couldn't get a checkout session data");
         }
 
         if (!checkoutSession?.url) {
-            throw new Error('Couldn\'t get a checkout session url');
+            throw new Error("Couldn't get a checkout session url");
         }
 
         if (!checkoutSession?.id) {
-            throw new Error('Couldn\'t get a checkout session id');
+            throw new Error("Couldn't get a checkout session id");
         }
 
         await prisma.order.update({
             where: {
-                id: order.id
+                id: order.id,
             },
             data: {
-                paymentId: checkoutSession?.id
-            }
+                paymentId: checkoutSession?.id,
+            },
         });
 
-        await sendEmail(data.email, "Next Pizza / Нове замовлення", OrderPaymentTemplate({
-            orderId: order.id,
-            totalAmount: order.totalAmount,
-            paymentUrl: checkoutSession?.url
-        }));
+        await sendEmail(
+            data.email,
+            'Next Pizza / Нове замовлення',
+            OrderPaymentTemplate({
+                orderId: order.id,
+                totalAmount: order.totalAmount,
+                paymentUrl: checkoutSession?.url,
+            }),
+        );
 
         return checkoutSession.url;
     } catch (error) {
-        console.error("Error [CREATE_ORDER]", error);
+        console.error('Error [CREATE_ORDER]', error);
         throw error;
     }
 }
@@ -132,12 +139,12 @@ export async function registerUser(data: RegisterUserDTO) {
     try {
         const findUser = await prisma.user.findFirst({
             where: {
-                email: data.email
-            }
+                email: data.email,
+            },
         });
 
         if (findUser) {
-            throw new Error("User already exists");
+            throw new Error('User already exists');
         }
 
         const createdUser = await prisma.user.create({
@@ -145,7 +152,7 @@ export async function registerUser(data: RegisterUserDTO) {
                 email: data.email,
                 fullName: data.fullName,
                 password: hashSync(data.password, 10),
-                role: UserRole.USER
+                role: UserRole.USER,
             },
         });
 
@@ -154,15 +161,19 @@ export async function registerUser(data: RegisterUserDTO) {
         await prisma.verificationCode.create({
             data: {
                 userId: createdUser.id,
-                code
-            }
+                code,
+            },
         });
 
         const verificationUrl = `${process.env.NEXT_PUBLIC_API_URL}/auth/verify?code=${code}`;
 
-        await sendEmail(createdUser.email, 'Код підтвердження', VerificationCodeTemplate({ verificationUrl }))
+        await sendEmail(
+            createdUser.email,
+            'Код підтвердження',
+            VerificationCodeTemplate({ verificationUrl }),
+        );
     } catch (error) {
-        console.error("Error [REGISTER_USER]", error);
+        console.error('Error [REGISTER_USER]', error);
         throw error;
     }
 }
@@ -177,8 +188,8 @@ export async function updateUser(data: UpdateUserDTO) {
 
         const findUser = await prisma.user.findFirst({
             where: {
-                id: Number(sessionUser.id)
-            }
+                id: Number(sessionUser.id),
+            },
         });
 
         if (!findUser) {
@@ -187,16 +198,18 @@ export async function updateUser(data: UpdateUserDTO) {
 
         await prisma.user.update({
             where: {
-                id: Number(sessionUser.id)
+                id: Number(sessionUser.id),
             },
             data: {
                 email: data.email,
                 fullName: data.fullName,
-                ...(data.password.length && { password: hashSync(data.password, 10) })
-            }
+                ...(data.password.length && {
+                    password: hashSync(data.password, 10),
+                }),
+            },
         });
     } catch (error) {
-        console.error("Error [UPDATE_USER]", error);
+        console.error('Error [UPDATE_USER]', error);
         throw error;
     }
 }

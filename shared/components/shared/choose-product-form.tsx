@@ -1,6 +1,7 @@
-import { cn } from '../../lib/utils';
 import React from 'react';
+
 import { Title } from './title';
+import { cn } from '../../lib/utils';
 import { Button } from '../ui';
 
 interface Props {
@@ -36,7 +37,8 @@ export const ChooseProductForm: React.FC<Props> = ({
                 <Button
                     loading={loading}
                     onClick={onSubmit}
-                    className="h-[55px] px-10 text-base rounded-[18px] w-full mt-10">
+                    className="h-[55px] px-10 text-base rounded-[18px] w-full mt-10"
+                >
                     Додати до корзини за {price} ₴
                 </Button>
             </div>

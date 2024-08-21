@@ -1,4 +1,5 @@
 import { prisma } from 'prisma/db';
+
 import { calcCartItemTotalPrice } from './calc-cart-item-total-price';
 
 export const updateCartTotalAmount = async (token: string) => {

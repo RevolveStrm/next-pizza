@@ -1,15 +1,17 @@
 'use client';
 
-import { Dialog, DialogContent } from '../../ui/dialog';
-import React from 'react';
-import { cn } from '../../../lib/utils';
-import { useRouter } from 'next/navigation';
-import { ChooseProductForm } from '../choose-product-form';
-import { ChoosePizzaForm } from '../choose-pizza-form';
-import { ProductWithRelations } from 'types/product';
-import { useCartStore } from 'shared/store';
 import { ProductItem } from '@prisma/client';
+import { useRouter } from 'next/navigation';
+import React from 'react';
 import toast from 'react-hot-toast';
+
+import { useCartStore } from 'shared/store';
+import { ProductWithRelations } from 'types/product';
+
+import { cn } from '../../../lib/utils';
+import { Dialog, DialogContent } from '../../ui/dialog';
+import { ChoosePizzaForm } from '../choose-pizza-form';
+import { ChooseProductForm } from '../choose-product-form';
 
 interface Props {
     product: ProductWithRelations;
@@ -25,11 +27,14 @@ export const ChooseProductModal: React.FC<Props> = ({ className, product }) => {
     const firstProductItem: ProductItem = product.items?.[0];
     const isPizza: boolean = Boolean(firstProductItem?.pizzaType);
 
-    const onSubmit = async (productItemId: number, ingredients: number[] = []) => {
+    const onSubmit = async (
+        productItemId: number,
+        ingredients: number[] = [],
+    ) => {
         try {
             await addCartItem({
                 productItemId,
-                ingredients
+                ingredients,
             });
             toast.success(`${product.name} було додано до корзини`);
             router.back();
@@ -39,10 +44,15 @@ export const ChooseProductModal: React.FC<Props> = ({ className, product }) => {
         }
     };
 
-    return <Dialog open={Boolean(product)} onOpenChange={() => router.back()}>
-        <DialogContent className={cn('p-0 w-[1060px] max-w-[1060px] min-h-[500px] bg-white overflow-hidden', className)}>
-            {
-                isPizza ?
+    return (
+        <Dialog open={Boolean(product)} onOpenChange={() => router.back()}>
+            <DialogContent
+                className={cn(
+                    'p-0 w-[1060px] max-w-[1060px] min-h-[500px] bg-white overflow-hidden',
+                    className,
+                )}
+            >
+                {isPizza ? (
                     <ChoosePizzaForm
                         imageUrl={product.imageUrl}
                         name={product.name}
@@ -50,7 +60,8 @@ export const ChooseProductModal: React.FC<Props> = ({ className, product }) => {
                         items={product.items}
                         onSubmit={onSubmit}
                         loading={cartLoading}
-                    /> :
+                    />
+                ) : (
                     <ChooseProductForm
                         imageUrl={product.imageUrl}
                         name={product.name}
@@ -58,8 +69,8 @@ export const ChooseProductModal: React.FC<Props> = ({ className, product }) => {
                         onSubmit={() => onSubmit(firstProductItem.id)}
                         loading={cartLoading}
                     />
-            }
-
-        </DialogContent>
-    </Dialog>;
-}
+                )}
+            </DialogContent>
+        </Dialog>
+    );
+};

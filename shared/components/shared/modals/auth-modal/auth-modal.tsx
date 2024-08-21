@@ -1,7 +1,9 @@
 import { signIn } from 'next-auth/react';
 import React from 'react';
+
 import { Button } from 'shared/components/ui';
 import { Dialog, DialogContent } from 'shared/components/ui/dialog';
+
 import { LoginForm } from './forms/login-form';
 import { RegisterForm } from './forms/register-form';
 
@@ -12,25 +14,31 @@ interface Props {
 }
 
 export const AuthModal: React.FC<Props> = ({ className, open, onClose }) => {
-    const [authType, setAuthType] = React.useState<'login' | 'register'>('login');
+    const [authType, setAuthType] = React.useState<'login' | 'register'>(
+        'login',
+    );
 
     const handleClose = () => {
         onClose();
     };
 
     const onSwitchType = () => {
-        setAuthType((prevState) => prevState === 'login' ? 'register' : 'login')
-    }
+        setAuthType((prevState) =>
+            prevState === 'login' ? 'register' : 'login',
+        );
+    };
 
     return (
         <Dialog open={open} onOpenChange={handleClose}>
-            <DialogContent className='w-[450px] bg-white p-10'>
-
-                {
-                    authType === 'login' ?
-                        <LoginForm onClose={handleClose} /> :
-                        <RegisterForm onClose={handleClose} onSuccess={onSwitchType} />
-                }
+            <DialogContent className="w-[450px] bg-white p-10">
+                {authType === 'login' ? (
+                    <LoginForm onClose={handleClose} />
+                ) : (
+                    <RegisterForm
+                        onClose={handleClose}
+                        onSuccess={onSwitchType}
+                    />
+                )}
 
                 <div className="flex gap-2">
                     <Button
@@ -42,8 +50,12 @@ export const AuthModal: React.FC<Props> = ({ className, open, onClose }) => {
                             })
                         }
                         type="button"
-                        className="gap-2 h-12 p-2 flex-1">
-                        <img className="w-6 h-6" src="https://github.githubassets.com/favicons/favicon.svg" />
+                        className="gap-2 h-12 p-2 flex-1"
+                    >
+                        <img
+                            className="w-6 h-6"
+                            src="https://github.githubassets.com/favicons/favicon.svg"
+                        />
                         GitHub
                     </Button>
 
@@ -56,7 +68,8 @@ export const AuthModal: React.FC<Props> = ({ className, open, onClose }) => {
                             })
                         }
                         type="button"
-                        className="gap-2 h-12 p-2 flex-1">
+                        className="gap-2 h-12 p-2 flex-1"
+                    >
                         <img
                             className="w-6 h-6"
                             src="https://fonts.gstatic.com/s/i/productlogos/googleg/v6/24px.svg"
@@ -65,18 +78,30 @@ export const AuthModal: React.FC<Props> = ({ className, open, onClose }) => {
                     </Button>
                 </div>
 
-                <div className='text-center'>
-                    {
-                        authType === 'login' ?
-                            <p>Не маєте акаунту? Перейдіть до <span
+                <div className="text-center">
+                    {authType === 'login' ? (
+                        <p>
+                            Не маєте акаунту? Перейдіть до{' '}
+                            <span
                                 onClick={onSwitchType}
-                                className='text-primary underline cursor-pointer'>реєстрації</span></p> :
-                            <p>Маєте акаунт? Перейдіть до <span
+                                className="text-primary underline cursor-pointer"
+                            >
+                                реєстрації
+                            </span>
+                        </p>
+                    ) : (
+                        <p>
+                            Маєте акаунт? Перейдіть до{' '}
+                            <span
                                 onClick={onSwitchType}
-                                className='text-primary underline cursor-pointer'>входу</span></p>
-                    }
+                                className="text-primary underline cursor-pointer"
+                            >
+                                входу
+                            </span>
+                        </p>
+                    )}
                 </div>
             </DialogContent>
         </Dialog>
     );
-}
+};

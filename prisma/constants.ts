@@ -1,72 +1,75 @@
-import { Category, Ingredient, Product, User, UserRole } from "@prisma/client";
-import { hashSync } from 'bcrypt'
+import { Category, Ingredient, Product, User, UserRole } from '@prisma/client';
+import { hashSync } from 'bcrypt';
 
 export const SIZE_TO_MIN_PRICE = {
     20: 100,
     30: 150,
-    40: 200
+    40: 200,
 };
 
 export const SIZE_TO_MAX_PRICE = {
     20: 150,
     30: 200,
-    40: 250
+    40: 250,
 };
 
-export const users: Omit<User, 'id' | 'provider' | 'providerId' | 'createdAt' | 'updatedAt'>[] = [
+export const users: Omit<
+    User,
+    'id' | 'provider' | 'providerId' | 'createdAt' | 'updatedAt'
+>[] = [
     {
-        "fullName": "Stepan Vladyka",
-        "email": "highskillinvoker@gmail.com",
-        "password": hashSync('12345678', 10),
-        "verifiedAt": new Date(),
-        "role": UserRole.USER
+        fullName: 'Stepan Vladyka',
+        email: 'highskillinvoker@gmail.com',
+        password: hashSync('12345678', 10),
+        verifiedAt: new Date(),
+        role: UserRole.USER,
     },
     {
-        "fullName": "John Doe",
-        "email": "john.doe@gmail.com",
-        "password": hashSync('password123', 10),
-        "verifiedAt": new Date(),
-        "role": UserRole.USER
+        fullName: 'John Doe',
+        email: 'john.doe@gmail.com',
+        password: hashSync('password123', 10),
+        verifiedAt: new Date(),
+        role: UserRole.USER,
     },
     {
-        "fullName": "Jane Smith",
-        "email": "jane.smith@gmail.com",
-        "password": hashSync('securepass456', 10),
-        "verifiedAt": new Date(),
-        "role": UserRole.USER
+        fullName: 'Jane Smith',
+        email: 'jane.smith@gmail.com',
+        password: hashSync('securepass456', 10),
+        verifiedAt: new Date(),
+        role: UserRole.USER,
     },
     {
-        "fullName": "Alice Johnson",
-        "email": "alice.johnson@gmail.com",
-        "password": hashSync("mypassword789", 10),
-        "verifiedAt": new Date(),
-        "role": UserRole.USER
+        fullName: 'Alice Johnson',
+        email: 'alice.johnson@gmail.com',
+        password: hashSync('mypassword789', 10),
+        verifiedAt: new Date(),
+        role: UserRole.USER,
     },
     {
-        "fullName": "Alex Yankovic",
-        "email": "alex.yankovic@gmail.com",
-        "password": hashSync("adminisgod098", 10),
-        "verifiedAt": new Date(),
-        "role": UserRole.ADMIN
+        fullName: 'Alex Yankovic',
+        email: 'alex.yankovic@gmail.com',
+        password: hashSync('adminisgod098', 10),
+        verifiedAt: new Date(),
+        role: UserRole.ADMIN,
     },
 ];
 
-export const categories: Omit<Category, "id" | "createdAt" | "updatedAt">[] = [
+export const categories: Omit<Category, 'id' | 'createdAt' | 'updatedAt'>[] = [
     {
-        name: "Піци",
+        name: 'Піци',
     },
     {
-        name: "Закуски",
+        name: 'Закуски',
     },
     {
-        name: "Напої",
+        name: 'Напої',
     },
     {
-        name: "Десерти",
-    }
+        name: 'Десерти',
+    },
 ];
 
-export const ingredients: Omit<Ingredient, "createdAt" | "updatedAt">[] = [
+export const ingredients: Omit<Ingredient, 'createdAt' | 'updatedAt'>[] = [
     {
         id: 1,
         name: 'Сирний борт',
@@ -169,13 +172,19 @@ export const ingredients: Omit<Ingredient, "createdAt" | "updatedAt">[] = [
         price: 65,
         imageEngName: 'meatballs',
     },
-].map((obj, index) => ({
-    ...obj,
-    imageUrl: `/assets/images/ingredients/${obj.imageEngName}.png`,
-}))
-    .map(el => ({ id: el.id, name: el.name, price: el.price, imageUrl: el.imageUrl }));
+]
+    .map((obj, index) => ({
+        ...obj,
+        imageUrl: `/assets/images/ingredients/${obj.imageEngName}.png`,
+    }))
+    .map((el) => ({
+        id: el.id,
+        name: el.name,
+        price: el.price,
+        imageUrl: el.imageUrl,
+    }));
 
-export const products: Omit<Product, "id" | "createdAt" | "updatedAt">[] = [
+export const products: Omit<Product, 'id' | 'createdAt' | 'updatedAt'>[] = [
     {
         name: 'Рол Шинка Сир',
         imageUrl: '/assets/images/products/cheese_ham_roll.png',
@@ -260,5 +269,5 @@ export const products: Omit<Product, "id" | "createdAt" | "updatedAt">[] = [
         name: 'Чізкейк Нью-Йорк',
         imageUrl: '/assets/images/products/cheesecake_dessert.png',
         categoryId: 4,
-    }
+    },
 ];

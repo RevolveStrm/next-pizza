@@ -1,10 +1,11 @@
-import GitHubProvider from "next-auth/providers/github";
-import CredentialsProvider from "next-auth/providers/credentials";
+import { UserRole } from '@prisma/client';
+import { compare, hashSync } from 'bcrypt';
+import { AuthOptions } from 'next-auth';
+import CredentialsProvider from 'next-auth/providers/credentials';
+import GitHubProvider from 'next-auth/providers/github';
 import GoogleProvider from 'next-auth/providers/google';
-import { prisma } from "prisma/db";
-import { compare, hashSync } from "bcrypt";
-import { AuthOptions } from "next-auth";
-import { UserRole } from "@prisma/client";
+
+import { prisma } from 'prisma/db';
 
 export const authOptions: AuthOptions = {
     providers: [
@@ -20,7 +21,7 @@ export const authOptions: AuthOptions = {
             name: 'Credentials',
             credentials: {
                 email: { label: 'Email', type: 'text' },
-                password: { label: 'Password', type: 'password' }
+                password: { label: 'Password', type: 'password' },
             },
             async authorize(credentials) {
                 if (!credentials) {
@@ -29,15 +30,18 @@ export const authOptions: AuthOptions = {
 
                 const findUser = await prisma.user.findFirst({
                     where: {
-                        email: credentials.email
-                    }
+                        email: credentials.email,
+                    },
                 });
 
                 if (!findUser || !findUser.verifiedAt) {
                     return null;
                 }
 
-                const isPasswordValid = await compare(credentials.password, findUser.password);
+                const isPasswordValid = await compare(
+                    credentials.password,
+                    findUser.password,
+                );
 
                 if (!isPasswordValid) {
                     return null;
@@ -47,14 +51,14 @@ export const authOptions: AuthOptions = {
                     id: findUser.id,
                     email: findUser.email,
                     name: findUser.fullName,
-                    role: findUser.role
+                    role: findUser.role,
                 };
             },
-        })
+        }),
     ],
     secret: process.env.NEXTAUTH_SECRET as string,
     session: {
-        strategy: "jwt",
+        strategy: 'jwt',
         maxAge: 7 * 24 * 60 * 60,
         updateAge: 24 * 60 * 60,
     },
@@ -72,21 +76,24 @@ export const authOptions: AuthOptions = {
                 const findUser = await prisma.user.findFirst({
                     where: {
                         OR: [
-                            { provider: account?.provider, providerId: account?.providerAccountId },
-                            { email: user.email }
-                        ]
-                    }
+                            {
+                                provider: account?.provider,
+                                providerId: account?.providerAccountId,
+                            },
+                            { email: user.email },
+                        ],
+                    },
                 });
 
                 if (findUser) {
                     await prisma.user.update({
                         where: {
-                            email: user.email
+                            email: user.email,
                         },
                         data: {
                             provider: account?.provider,
-                            providerId: account?.providerAccountId
-                        }
+                            providerId: account?.providerAccountId,
+                        },
                     });
 
                     return true;
@@ -99,8 +106,8 @@ export const authOptions: AuthOptions = {
                         password: hashSync(user.id.toString(), 10),
                         provider: account?.provider,
                         providerId: account?.providerAccountId,
-                        role: UserRole.USER
-                    }
+                        role: UserRole.USER,
+                    },
                 });
 
                 return true;
@@ -140,5 +147,5 @@ export const authOptions: AuthOptions = {
 
             return session;
         },
-    }
+    },
 };

@@ -1,4 +1,6 @@
-export const createRawBody = async (stream: ReadableStream<Uint8Array>): Promise<Buffer> => {
+export const createRawBody = async (
+    stream: ReadableStream<Uint8Array>,
+): Promise<Buffer> => {
     const reader = stream.getReader();
     const chunks: Uint8Array[] = [];
 

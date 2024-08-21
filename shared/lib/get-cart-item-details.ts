@@ -1,21 +1,23 @@
-import { PizzaSize, PizzaType, mapPizzaType } from '../constants/pizza';
 import { CartStateItem } from './get-cart-details';
+import { PizzaSize, PizzaType, mapPizzaType } from '../constants/pizza';
 
 export const getCartItemDetails = (
-  ingredients: CartStateItem['ingredients'],
-  pizzaType?: PizzaType,
-  pizzaSize?: PizzaSize,
+    ingredients: CartStateItem['ingredients'],
+    pizzaType?: PizzaType,
+    pizzaSize?: PizzaSize,
 ): string => {
-  const details = [];
+    const details = [];
 
-  if (pizzaSize && pizzaType) {
-    const typeName = mapPizzaType[pizzaType];
-    details.push(`${typeName} ${pizzaSize} см`);
-  }
+    if (pizzaSize && pizzaType) {
+        const typeName = mapPizzaType[pizzaType];
+        details.push(`${typeName} ${pizzaSize} см`);
+    }
 
-  if (ingredients) {
-    details.push(...ingredients.map((ingredient) => ingredient.name.toLowerCase()));
-  }
+    if (ingredients) {
+        details.push(
+            ...ingredients.map((ingredient) => ingredient.name.toLowerCase()),
+        );
+    }
 
-  return details.join(', ').trim();
+    return details.join(', ').trim();
 };
