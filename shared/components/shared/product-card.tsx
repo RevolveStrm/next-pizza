@@ -3,7 +3,6 @@ import { Plus } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react';
 
-import { ingredients } from 'prisma/constants';
 import { cn } from 'shared/lib/utils';
 
 import { Title } from './title';

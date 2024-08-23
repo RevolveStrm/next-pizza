@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import React from 'react';
 import toast from 'react-hot-toast';
 
@@ -13,6 +13,7 @@ import { Container } from './container';
 import { AuthModal } from './modals/auth-modal/auth-modal';
 import { ProfileButton } from './profile-button';
 import { SearchInput } from './search-input';
+import { toastConfig } from 'shared/constants/toast-config';
 
 interface Props {
     hasSearch?: boolean;
@@ -22,26 +23,19 @@ interface Props {
 
 export const Header: React.FC<Props> = ({ className, hasSearch = true, hasCart = true }) => {
     const [openAuthModal, setOpenAuthModal] = React.useState(false);
-
     const searchParams = useSearchParams();
+    const router = useRouter();
 
-    React.useState(() => {
-        setTimeout(() => {
-            if (searchParams.has('paid')) {
-                toast.success(
-                    `Замовлення успішно оплачено! Інформація була відправлена на пошту.`,
-                );
-            }
-            if (searchParams.has('unpaid')) {
-                toast.error(
-                    `Замовлення не було оплачено! Спробуйте оплатити знову.`,
-                );
-            }
-            if (searchParams.has('verified')) {
-                toast.success(`Акаунт було успішно підтверджено!`);
-            }
-        }, 500);
-    }, []);
+    React.useEffect(() => {
+        const match = toastConfig.find(({ key }) => searchParams.has(key));
+    
+        if (match) {
+            setTimeout(() => {
+                router.replace('/');
+                match.fn(match.message, { duration: 3000 });
+            }, 1000);
+        }
+      }, []);
 
     return (
         <header className={cn('border-b', className)}>

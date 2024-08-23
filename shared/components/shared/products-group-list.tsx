@@ -1,6 +1,6 @@
 'use client';
 
-import { Product, ProductItem } from '@prisma/client';
+import { ProductItem } from '@prisma/client';
 import React from 'react';
 import { useIntersection } from 'react-use';
 

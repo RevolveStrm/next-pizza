@@ -7,7 +7,6 @@ import { cookies } from 'next/headers';
 import { prisma } from 'prisma/db';
 import { OrderPaymentTemplate } from 'shared/components/shared';
 import { VerificationCodeTemplate } from 'shared/components/shared/email-templates/verification-code';
-import { authOptions } from 'shared/constants/auth-options';
 import { CheckoutFormFields } from 'shared/constants/checkout-form-schema';
 import { createCheckoutSession } from 'shared/lib/create-payment-session';
 import { generateVerificationCode } from 'shared/lib/generate-verification-code';
