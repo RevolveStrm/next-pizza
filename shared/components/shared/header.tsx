@@ -30,10 +30,8 @@ export const Header: React.FC<Props> = ({ className, hasSearch = true, hasCart =
         const match = toastConfig.find(({ key }) => searchParams.has(key));
     
         if (match) {
-            setTimeout(() => {
-                router.replace('/');
-                match.fn(match.message, { duration: 3000 });
-            }, 1000);
+            router.replace('/');
+            match.fn(match.message, { duration: 3000 });
         }
       }, []);
 

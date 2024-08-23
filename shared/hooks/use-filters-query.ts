@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import qs from 'qs';
 import React from 'react';
 
@@ -8,6 +8,7 @@ import { Filters } from './use-filters';
 
 export const useFiltersQuery = (filters: Filters) => {
     const isMounted = React.useRef(false);
+    const pathname = usePathname();
     const router = useRouter();
 
     React.useEffect(() => {
@@ -24,9 +25,11 @@ export const useFiltersQuery = (filters: Filters) => {
                 skipNulls: true,
             });
 
-            router.push(`?${query}`, {
-                scroll: false,
-            });
+            if (!pathname.includes("/product/")) {
+                router.push(`?${query}`, {
+                    scroll: false,
+                });
+            }
         }
 
         isMounted.current = true;
