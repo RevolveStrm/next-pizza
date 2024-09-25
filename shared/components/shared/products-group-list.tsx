@@ -41,14 +41,14 @@ export const ProductsGroupList: React.FC<Props> = ({
                     window.location.hash.replace('#', ''),
                 );
                 const element = intersectionRef.current as HTMLDivElement;
-                const elementY = element.getBoundingClientRect().top;
+                const elementY: number = element.getBoundingClientRect().top;
+                const windowY: number = window.scrollY;
 
                 if (element.id !== hash) {
                     return;
                 }
 
-                const y: number =
-                    elementY + window.scrollY + STICKY_HEADER_HEIGHT;
+                const y: number = elementY + windowY + STICKY_HEADER_HEIGHT;
 
                 window.scrollTo({ top: y, behavior: 'smooth' });
             }
