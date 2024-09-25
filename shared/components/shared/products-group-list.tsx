@@ -11,6 +11,8 @@ import { ProductCard } from './product-card';
 import { Title } from './title';
 import { useCategoryStore } from '../../store';
 
+import { useYScroll } from 'shared/hooks';
+
 interface Props {
     title: string;
     products: ProductWithRelations[];
@@ -35,41 +37,12 @@ export const ProductsGroupList: React.FC<Props> = ({
     });
 
     React.useEffect(() => {
-        const handleHashChange = () => {
-            if (intersectionRef.current && window.location.hash) {
-                const hash = decodeURIComponent(
-                    window.location.hash.replace('#', ''),
-                );
-                const element = intersectionRef.current as HTMLDivElement;
-                const elementY: number = element.getBoundingClientRect().top;
-                const windowY: number = window.scrollY;
-
-                if (element.id !== hash) {
-                    return;
-                }
-
-                const y: number = elementY + windowY + STICKY_HEADER_HEIGHT;
-
-                window.scrollTo({ top: y, behavior: 'smooth' });
-            }
-        };
-
-        window.addEventListener('hashchange', handleHashChange);
-
-        if (window.location.hash) {
-            handleHashChange();
-        }
-
-        return () => {
-            window.removeEventListener('hashchange', handleHashChange);
-        };
-    }, []);
-
-    React.useEffect(() => {
         if (intersection?.isIntersecting) {
             setActiveCategoryId(categoryId);
         }
     }, [categoryId, title, intersection?.isIntersecting]);
+
+    useYScroll(intersectionRef, STICKY_HEADER_HEIGHT);
 
     return (
         <div className={cn('', className)} id={title} ref={intersectionRef}>
